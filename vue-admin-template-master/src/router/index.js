@@ -36,6 +36,28 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
+// 讲师标签路由
+  {
+    path: '/teacher',
+    component: Layout,
+    redirect: '/teacher/list',
+    name: '讲师管理',
+    meta: { title: '讲师管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: '讲师列表',
+        component: () => import('@/views/edu/teacher/list'),
+        meta: { title: '讲师列表', icon: 'table' }
+      },
+      {
+        path: 'save',
+        name: '讲师添加',
+        component: () => import('@/views/edu/teacher/save'),
+        meta: { title: '讲师添加', icon: 'tree' }
+      }
+    ]
+  },
 
   {
     path: '/example',
