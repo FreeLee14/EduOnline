@@ -36,7 +36,7 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-// 讲师标签路由
+  // 讲师标签路由
   {
     path: '/teacher',
     component: Layout,
@@ -60,23 +60,23 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/example',
+    path: '/student',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/student/list',
+    name: '学生管理',
+    meta: { title: '学生管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'list',
+        name: '学生名单',
+        component: () => import('@/views/edu/student/list'),
+        meta: { title: '学生名单', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'save',
+        name: '学生添加',
+        component: () => import('@/views/edu/student/save'),
+        meta: { title: '学生添加', icon: 'tree' }
       }
     ]
   },

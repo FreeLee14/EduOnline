@@ -1,21 +1,22 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
+export function login(userId, password, roleType) {
   return request({
     url: '/onlineedu/user/login',
     method: 'post',
     data: {
-      username,
-      password
+      userId,
+      password,
+      roleType
     }
   })
 }
 
-export function getInfo(token) {
+export function getInfo(userId) {
   return request({
     url: '/onlineedu/user/info',
     method: 'get',
-    params: { token }
+    params: { userId }
   })
 }
 

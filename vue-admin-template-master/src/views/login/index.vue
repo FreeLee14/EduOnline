@@ -23,6 +23,14 @@
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
+      <el-form-item/>
+      <el-select v-model="loginForm.roleType" placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           登录
@@ -55,7 +63,8 @@ export default {
     return {
       loginForm: {
         userId: 'admin',
-        password: 'admin'
+        password: 'admin',
+        roleType: 'ADMIN'
       },
       loginRules: {
         userId: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -63,7 +72,17 @@ export default {
       },
       loading: false,
       pwdType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      options: [{
+        value: 'ADMIN',
+        label: '管理员'
+      }, {
+        value: 'TEACHER',
+        label: '教师'
+      }, {
+        value: 'STUDENT',
+        label: '学生'
+      }]
     }
   },
   watch: {
@@ -83,6 +102,7 @@ export default {
       }
     },
     handleLogin() {
+      console.log(this.loginForm.roleType)
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
