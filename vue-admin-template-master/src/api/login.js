@@ -12,9 +12,10 @@ export function login(userId, password, roleType) {
   })
 }
 
-export function getInfo(userId) {
+export function getInfo(userId, token) {
   return request({
     url: '/onlineedu/user/info',
+    headers: { 'Token': token },
     method: 'get',
     params: { userId }
   })
