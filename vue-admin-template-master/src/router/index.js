@@ -8,6 +8,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
+import detail from '../views/edu/detail'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
@@ -55,10 +56,16 @@ export const constantRouterMap = [
         name: '讲师添加',
         component: () => import('@/views/edu/teacher/save'),
         meta: { title: '讲师添加', icon: 'tree' }
+      },
+      // 用户详细信息组件
+      {
+        hidden: true,
+        path: '/detail',
+        component: detail
       }
     ]
   },
-
+  // 学生路由
   {
     path: '/student',
     component: Layout,
@@ -77,19 +84,39 @@ export const constantRouterMap = [
         name: '学生添加',
         component: () => import('@/views/edu/student/save'),
         meta: { title: '学生添加', icon: 'tree' }
+      },
+      // 用户详细信息组件
+      {
+        hidden: true,
+        path: '/detail',
+        component: detail
       }
     ]
   },
 
   {
-    path: '/form',
+    path: '/class',
     component: Layout,
+    redirect: '/class/list',
+    name: '课程管理',
+    meta: { title: '课程管理', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'list',
+        name: '课程列表',
+        component: () => import('@/views/edu/class/list'),
+        meta: { title: '课程列表', icon: 'table' }
+      },
+      {
+        path: 'save',
+        name: '添加课程',
+        component: () => import('@/views/edu/class/save'),
+        meta: { title: '添加课程', icon: 'tree' }
+      },
+      {
+        path: 'classInfo',
+        hidden: true,
+        component: () => import('@/views/edu/class/classInfo')
       }
     ]
   },
@@ -163,7 +190,12 @@ export const constantRouterMap = [
     ]
   },
 
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  // 用户详细信息组件
+  {
+    path: '/detail',
+    component: detail
+  }
 ]
 
 export default new Router({

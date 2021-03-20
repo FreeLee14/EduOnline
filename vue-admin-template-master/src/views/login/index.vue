@@ -62,8 +62,8 @@ export default {
     }
     return {
       loginForm: {
-        userId: 'admin',
-        password: 'admin',
+        userId: '19809911',
+        password: '1484840359',
         roleType: 'ADMIN'
       },
       loginRules: {
