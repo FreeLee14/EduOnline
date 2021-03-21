@@ -10,27 +10,27 @@ export function pageSearch(currentPage, limit) {
     }
   })
 }
-export function pageSearchByCondition(currentPage, limit) {
+// 条件分页查询
+export function pageSearchByCondition(trans, currentPage, limit, classQueryVO) {
   return request({
     url: '/onlineedu/class/pageSearchByCondition/' + currentPage + '/' + limit,
-    method: 'get',
-    params: {
-      currentPage,
-      limit
-    }
+    method: 'post',
+    transformRequest: trans,
+    data: classQueryVO
   })
 }
-export function pageSearchByTeacher(currentPage, limit) {
+export function pageSearchByTeacher(nowId, currentPage, limit) {
   return request({
     url: '/onlineedu/class/pageSearchByTeacher',
     method: 'get',
     params: {
+      nowId,
       currentPage,
       limit
     }
   })
 }
-// 根据课程编号查询具体学生信息
+// 根据课程编号查询具体课程信息
 export function info(id) {
   return request({
     url: '/onlineedu/class/info',
@@ -41,7 +41,7 @@ export function info(id) {
   })
 }
 // 更新课程信息
-export function updateclass(trans, classInfo) {
+export function updateClass(trans, classInfo) {
   return request({
     url: '/onlineedu/class/update',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

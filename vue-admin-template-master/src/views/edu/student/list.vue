@@ -2,7 +2,7 @@
 <template>
   <div class="app-container">
     <h1>学生名单</h1>
-    <table v-show="flag">
+    <table v-show="flag" style="height: 800px">
       <tr>
         <div class="item-nominate">
           <el-table

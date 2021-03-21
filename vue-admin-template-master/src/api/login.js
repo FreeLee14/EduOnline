@@ -21,9 +21,12 @@ export function getInfo(userId, token) {
   })
 }
 
-export function logout() {
+export function logout(token) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/onlineedu/user/logout',
+    method: 'get',
+    params: {
+      token
+    }
   })
 }

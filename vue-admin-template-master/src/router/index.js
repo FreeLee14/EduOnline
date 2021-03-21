@@ -114,7 +114,7 @@ export const constantRouterMap = [
         meta: { title: '添加课程', icon: 'tree' }
       },
       {
-        path: 'classInfo',
+        path: '/classInfo',
         hidden: true,
         component: () => import('@/views/edu/class/classInfo')
       }

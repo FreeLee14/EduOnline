@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { pageSearch, pageSearchByTeacher, info, saveClass } from '@/api/edu/class/class'
+import { saveClass } from '@/api/edu/class/class'
 import { queryAllTeacher } from '@/api/edu/teacher/teacher'
 import qs from 'qs'
 export default {
