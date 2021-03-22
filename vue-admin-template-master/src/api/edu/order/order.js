@@ -1,10 +1,11 @@
 import request from '@/utils/request'
-// 分页查询所有订单信息
-export function pageSearch(currentPage, limit) {
+// 传入的nowId为当前学生学号，后台会校验是否为学生，同时分页查询当前学生的所有订单信息
+export function pageSearch(nowId, currentPage, limit) {
   return request({
     url: '/onlineedu/order/pageSearch',
     method: 'get',
     params: {
+      nowId,
       currentPage,
       limit
     }
@@ -32,9 +33,9 @@ export function deleteOrder(nowId, deleteId) {
   })
 }
 // 保存订单
-export function saveOrder(trans, nowId, orderInfo) {
+export function saveOrder(trans, orderInfo) {
   return request({
-    url: '/onlineedu/order/save/' + nowId,
+    url: '/onlineedu/order/save',
     method: 'post',
     transformRequest: trans,
     data: orderInfo

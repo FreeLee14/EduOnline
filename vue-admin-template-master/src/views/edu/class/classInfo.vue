@@ -54,6 +54,7 @@
 <script>
 import qs from 'qs'
 import { updateClass } from '@/api/edu/class/class'
+import { saveOrder } from '@/api/edu/order/order'
 export default {
 
   components: {},
@@ -74,7 +75,14 @@ export default {
       }, {
         value: 3,
         label: '已结课'
-      }]
+      }],
+      // 订单信息
+      orderInfo: {
+        orderId: '',
+        studentId: '',
+        classId: '',
+        status: ''
+      }
     }
   },
 
@@ -131,7 +139,45 @@ export default {
       })
     },
     // 购买课程
-    purchase() {},
+    purchase(classInfo) {
+      var time = new Date()
+      // 订单编号根据当前的时间戳
+      this.orderInfo.orderId = 'Edu' + time.getFullYear() + '' + (time.getMonth() + 1) + '' + time.getday() + '' + time.getHours() + '' + time.getMinutes() + '' + time.getSeconds()
+      this.orderInfo.classId = classInfo.classId
+      // 由于只有学生才可以进行下订单，所以将当前id赋值给学生id
+      this.orderInfo.studentId = this.nowId
+      // 初步保存订单设定为0 即未支付状态
+      this.orderInfo.status = 0
+
+      // 保存订单
+      saveOrder(
+        [
+          function(data) {
+            return qs.stringify(data)
+          }
+        ],
+        this.orderInfo
+      ).then(res => {
+        if (res !== null) {
+          if (res.success) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            // 暂存订单成功跳转到确认订单页面
+            this.$router.replace({
+              path: '',
+              query: {}
+            })
+          } else {
+            this.$message({
+              methods: res.message,
+              type: 'warning'
+            })
+          }
+        }
+      })
+    },
     // 添加购物车
     addToCart() {}
   }
