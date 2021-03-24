@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="app-container">
+  <div v-if="nowRole != '[STUDENT]'" class="app-container">
     <h1>学生添加</h1>
     <el-form ref="form" :model="student" label-width="80px">
       <el-form-item label="账号">
@@ -27,6 +27,7 @@
       </el-form-item>
     </el-form>
   </div>
+  <div v-else><h1>您当前没有权限查看</h1> </div>
 </template>
 
 <script>
@@ -49,7 +50,18 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    nowUserId: {
+      get() {
+        return this.$store.getters.userId
+      }
+    },
+    nowRole: {
+      get() {
+        return this.$store.getters.roles
+      }
+    }
+  },
 
   methods: {
     submit(student) {

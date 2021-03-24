@@ -22,12 +22,11 @@ export function info(id) {
   })
 }
 // 删除订单
-export function deleteOrder(nowId, deleteId) {
+export function deleteOrder(deleteId) {
   return request({
     url: '/onlineedu/order/delete',
     method: 'delete',
     params: {
-      nowId,
       deleteId
     }
   })
@@ -36,6 +35,15 @@ export function deleteOrder(nowId, deleteId) {
 export function saveOrder(trans, orderInfo) {
   return request({
     url: '/onlineedu/order/save',
+    method: 'post',
+    transformRequest: trans,
+    data: orderInfo
+  })
+}
+// 更新订单（作用是更新订单状态）
+export function updateOrder(trans, orderInfo) {
+  return request({
+    url: '/onlineedu/order/update',
     method: 'post',
     transformRequest: trans,
     data: orderInfo

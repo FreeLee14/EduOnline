@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div v-if="nowRole == '[ADMIN]'" class="app-container">
     <h1>讲师添加</h1>
     <el-form ref="form" :model="teacher" label-width="80px">
       <el-form-item label="账号">
@@ -27,11 +27,12 @@
         <el-input v-model="teacher.description" type="textarea" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit(teacher)">提交</el-button>
-        <el-button @click="cancle">取消</el-button>
+        <el-button v-if="nowRole == '[ADMIN]'" type="primary" @click="submit(teacher)">提交</el-button>
+        <el-button v-if="nowRole == '[ADMIN]'" @click="cancle">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
+  <div v-else><h1>您当前没有权限查看</h1> </div>
 </template>
 <script>
 import qs from 'qs'
@@ -61,6 +62,18 @@ export default {
         level: '',
         description: '',
         avator: ''
+      }
+    }
+  },
+  computed: {
+    nowUserId: {
+      get() {
+        return this.$store.getters.userId
+      }
+    },
+    nowRole: {
+      get() {
+        return this.$store.getters.roles
       }
     }
   },

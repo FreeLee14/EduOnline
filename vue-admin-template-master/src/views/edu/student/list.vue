@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="app-container">
+  <div v-if="nowRole != '[STUDENT]'" class="app-container">
     <h1>学生名单</h1>
     <table v-show="flag" style="height: 800px">
       <tr>
@@ -47,6 +47,7 @@
       <router-view />
     </table>
   </div>
+  <div v-else><h1>您当前没有权限查看</h1> </div>
 </template>
 
 <script>

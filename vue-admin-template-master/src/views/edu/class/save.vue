@@ -1,6 +1,6 @@
 <!-- 添加课程组件 -->
 <template>
-  <div class="app-container">
+  <div v-if="nowRole !== '[STUDENT]'" class="app-container">
     <h1>添加课程</h1>
     <el-form ref="form" :model="classInfo" label-width="80px">
       <el-form-item label="课程编号">
@@ -43,6 +43,7 @@
       </el-form-item>
     </el-form>
   </div>
+  <div v-else><h1>您当前没有权限查看</h1> </div>
 </template>
 
 <script>

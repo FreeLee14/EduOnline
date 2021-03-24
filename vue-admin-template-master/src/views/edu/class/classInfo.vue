@@ -141,11 +141,12 @@ export default {
     // 购买课程
     purchase(classInfo) {
       var time = new Date()
+      console.info(time)
       // 订单编号根据当前的时间戳
-      this.orderInfo.orderId = 'Edu' + time.getFullYear() + '' + (time.getMonth() + 1) + '' + time.getday() + '' + time.getHours() + '' + time.getMinutes() + '' + time.getSeconds()
+      this.orderInfo.orderId = 'Edu' + time.getFullYear() + '' + (time.getMonth() + 1) + '' + time.getDay() + '' + time.getHours() + '' + time.getMinutes() + '' + time.getSeconds()
       this.orderInfo.classId = classInfo.classId
-      // 由于只有学生才可以进行下订单，所以将当前id赋值给学生id
-      this.orderInfo.studentId = this.nowId
+      // 由于只有学生才可以进行下订单，所以将当前id赋值为学生id
+      this.orderInfo.studentId = this.nowUserId
       // 初步保存订单设定为0 即未支付状态
       this.orderInfo.status = 0
 
@@ -166,8 +167,8 @@ export default {
             })
             // 暂存订单成功跳转到确认订单页面
             this.$router.replace({
-              path: '',
-              query: {}
+              path: '/order/ensureOrder',
+              query: { orderInfo: this.orderInfo }
             })
           } else {
             this.$message({
