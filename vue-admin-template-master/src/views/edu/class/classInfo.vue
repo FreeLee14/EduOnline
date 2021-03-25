@@ -46,8 +46,10 @@
         <!-- 该界面允许学生进行购买 添加购物车 -->
         <el-button v-if="isStudent" type="primary" @click="purchase(classInfo)">购买</el-button>
         <el-button v-if="isStudent" type="primary" @click="addToCart(classInfo)">添加购物车</el-button>
+        <el-button v-if="isStudent" type="primary" @click="test(classInfo)">测试跳转</el-button>
       </el-form-item>
     </el-form>
+    <router-view />
   </div>
 </template>
 
@@ -180,7 +182,15 @@ export default {
       })
     },
     // 添加购物车
-    addToCart() {}
+    addToCart() {},
+    test(classInfo) {
+      this.$router.replace(
+        {
+          path: '/order/test',
+          query: { classInfo: classInfo }
+        }
+      )
+    }
   }
 }
 

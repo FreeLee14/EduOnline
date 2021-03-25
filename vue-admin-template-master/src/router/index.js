@@ -141,6 +141,11 @@ export const constantRouterMap = [
         path: 'ensureOrder',
         hidden: true,
         component: () => import('@/views/edu/order/ensureOrder')
+      },
+      {
+        path: 'test',
+        hidden: true,
+        component: () => import('@/views/edu/order/test')
       }
     ]
   },

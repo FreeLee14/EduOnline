@@ -2,7 +2,7 @@
 <template >
   <div v-if="nowRole == '[STUDENT]'" class="app-container">
     <h1 >订单管理</h1>
-    <table v-show="isStudent">
+    <table v-show="isStudent" align="center" style="height: 1000px">
       <tr>
         <div class="item-nominate">
           <el-table
@@ -12,19 +12,19 @@
             <el-table-column
               prop="orderId"
               label="订单编号"
-              width="180"/>
+              width="400"/>
             <el-table-column
               prop="status"
               label="订单状态"
-              width="180"/>
+              width="300"/>
             <el-table-column
               prop="createTime"
               label="日期"
-              width="180"/>
+              width="400"/>
             <el-table-column
               fixed="right"
               label="操作"
-              width="100">
+              width="350">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="queryOrder(scope.row)">查看</el-button>
                 <el-button type="text" size="small" @click="deleteOrder(scope.row)">删除</el-button>
