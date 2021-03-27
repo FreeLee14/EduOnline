@@ -12,22 +12,24 @@ export function pageSearch(nowId, currentPage, limit) {
   })
 }
 // 根据订单编号查询具体订单信息
-export function info(id) {
+export function info(id, nowId) {
   return request({
     url: '/onlineedu/order/info',
     method: 'get',
     params: {
-      id
+      id,
+      nowId
     }
   })
 }
 // 删除订单
-export function deleteOrder(deleteId) {
+export function deleteOrder(orderId, nowId) {
   return request({
     url: '/onlineedu/order/delete',
     method: 'delete',
     params: {
-      deleteId
+      orderId,
+      nowId
     }
   })
 }

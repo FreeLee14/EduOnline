@@ -46,7 +46,6 @@
         <!-- 该界面允许学生进行购买 添加购物车 -->
         <el-button v-if="isStudent" type="primary" @click="purchase(classInfo)">购买</el-button>
         <el-button v-if="isStudent" type="primary" @click="addToCart(classInfo)">添加购物车</el-button>
-        <el-button v-if="isStudent" type="primary" @click="test(classInfo)">测试跳转</el-button>
       </el-form-item>
     </el-form>
     <router-view />
@@ -57,6 +56,7 @@
 import qs from 'qs'
 import { updateClass } from '@/api/edu/class/class'
 import { saveOrder } from '@/api/edu/order/order'
+import { saveToCart } from '@/api/edu/cart/cart'
 export default {
 
   components: {},
@@ -84,6 +84,11 @@ export default {
         studentId: '',
         classId: '',
         status: ''
+      },
+      // 购物车保存传递参数
+      cartParam: {
+        classId: '',
+        studentId: ''
       }
     }
   },
@@ -182,14 +187,31 @@ export default {
       })
     },
     // 添加购物车
-    addToCart() {},
-    test(classInfo) {
-      this.$router.replace(
-        {
-          path: '/order/test',
-          query: { classInfo: classInfo }
+    addToCart(classInfo) {
+      this.cartParam.classId = classInfo.classId
+      this.cartParam.studentId = this.nowUserId
+      saveToCart(
+        [
+          function(data) {
+            return qs.stringify(data)
+          }
+        ],
+        this.cartParam
+      ).then(res => {
+        if (res != null) {
+          if (res.success) {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+          } else {
+            this.$message({
+              methods: res.message,
+              type: 'warning'
+            })
+          }
         }
-      )
+      })
     }
   }
 }

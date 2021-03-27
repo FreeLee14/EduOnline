@@ -16,7 +16,9 @@
             <el-table-column
               prop="status"
               label="订单状态"
-              width="300"/>
+              width="300">
+              <template slot-scope="scope">{{ getStatus(scope.row.status) }}</template>
+            </el-table-column>
             <el-table-column
               prop="createTime"
               label="日期"
@@ -101,14 +103,20 @@ export default {
     }
   },
   methods: {
+    // 查询订单
     queryOrder(row) {
       var orderId = row.orderId
-      info(orderId)
+      var nowId = this.nowUserId
+      info(orderId, nowId)
         .then(res => {
           if (res !== null) {
             if (res.success) {
               // 将根据订单id查询已保存但处于未支付状态的订单
               this.orderDetail = res.data
+              this.$router.replace({
+                path: '/orderDetail',
+                query: { orderDetail: this.orderDetail }
+              })
             }
           }
         })
@@ -116,7 +124,8 @@ export default {
     // 删除订单
     deleteOrder(row) {
       var orderId = row.orderId
-      deleteOrder(orderId)
+      var nowId = this.nowUserId
+      deleteOrder(orderId, nowId)
         .then(res => {
           if (res !== null) {
             if (res.success) {
@@ -124,6 +133,7 @@ export default {
                 message: res.message,
                 type: 'success'
               })
+              this.pageSearchOrder('0')
             } else {
               this.$message({
                 message: res.message,
@@ -133,7 +143,7 @@ export default {
           }
         })
     },
-    // 分页查询所有学生
+    // 分页查询所有订单
     pageSearchOrder(val) {
       // 由于mybaitsplus的分页插件自动处理的当前页数和记录数之间的关系，所以我们这里只需要传递正确的页数即可
       this.currentPage = val
@@ -147,6 +157,16 @@ export default {
             }
           }
         })
+    },
+    getStatus(id) {
+      switch (id) {
+        case 0:
+          return '未支付'
+        case 1:
+          return '已支付'
+        case 2:
+          return '已废弃'
+      }
     }
   }
 }

@@ -109,9 +109,9 @@ export const constantRouterMap = [
       },
       {
         path: 'save',
-        name: '添加课程',
+        name: '课程添加',
         component: () => import('@/views/edu/class/save'),
-        meta: { title: '添加课程', icon: 'tree' }
+        meta: { title: '课程添加', icon: 'tree' }
       },
       {
         path: '/classInfo',
@@ -146,17 +146,29 @@ export const constantRouterMap = [
         path: 'test',
         hidden: true,
         component: () => import('@/views/edu/order/test')
+      },
+      {
+        path: '/orderDetail',
+        hidden: true,
+        component: () => import('@/views/edu/order/orderDetail')
       }
     ]
   },
-
   {
-    path: 'external-link',
+    path: '/cart',
     component: Layout,
+    redirect: '/cart/list',
+    name: '购物车管理',
+    meta: {
+      title: '购物车管理',
+      icon: 'nested'
+    },
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'list',
+        component: () => import('@/views/edu/cart/list'), // Parent router-view
+        name: '购物车列表',
+        meta: { title: '购物车列表', icon: 'tree' }
       }
     ]
   },

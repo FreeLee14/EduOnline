@@ -142,11 +142,12 @@ export default {
       })
     },
     // 取消订单
-    cancelOrder(row) {
-      this.orderParam.orderId = row.orderId
-      this.orderParam.status = '2'
-      this.orderParam.price = row.price
-      this.orderParam = row.studentId
+    cancelOrder(orderDetail) {
+      this.orderParam.orderId = orderDetail.orderId
+      this.orderParam.status = 2
+      this.orderParam.price = orderDetail.price
+      this.orderParam.studentId = this.nowUserId
+      this.orderParam.classId = this.orderInfo.classId
       updateOrder(
         [
           function(data) {
