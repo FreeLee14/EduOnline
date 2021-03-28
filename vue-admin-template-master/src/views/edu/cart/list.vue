@@ -1,6 +1,6 @@
 <!-- 购物车列表 -->
 <template>
-  <div v-show="isStudent" class="app-container">
+  <div v-if="isStudent" class="app-container">
     <h1>购物车管理</h1>
     <table v-show="flag" style="height: 800px">
       <tr>
@@ -47,6 +47,7 @@
       </tr>
     </table>
   </div>
+  <div v-else><h1>您当前没有权限查看该页面</h1> </div>
 </template>
 
 <script>
@@ -119,21 +120,23 @@ export default {
   methods: {
     // 分页查询
     pageSearchCart(val) {
-      // 获取当前登录用户id
-      this.nowId = this.nowUserId
-      this.currentPage = val
-      pageSearch(this.nowId, this.currentPage, this.limit)
-        .then(res => {
-          if (res !== null) {
-            if (res.success) {
-              this.tableData = res.data.rows
-              // 每次翻页也要获取总记录数，进行一个动态的更新
-              this.tableDateLength = res.data.total
+      if (this.isStudent) {
+        // 获取当前登录用户id
+        this.nowId = this.nowUserId
+        this.currentPage = val
+        pageSearch(this.nowId, this.currentPage, this.limit)
+          .then(res => {
+            if (res !== null) {
+              if (res.success) {
+                this.tableData = res.data.rows
+                // 每次翻页也要获取总记录数，进行一个动态的更新
+                this.tableDateLength = res.data.total
+              }
             }
-          }
-        })
+          })
+      }
     },
-    // 删除订单
+    // 删除课程
     deleteCart(classId) {
       var studentId = this.nowUserId
       deleteCart(classId, studentId)
@@ -165,7 +168,8 @@ export default {
       this.orderInfo.studentId = this.nowUserId
       // 初步保存订单设定为0 即未支付状态
       this.orderInfo.status = 0
-
+      // 完成结算之后自动删除购物车该课程信息
+      this.deleteCart(classInfo.classId)
       // 保存订单
       saveOrder(
         [

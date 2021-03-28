@@ -33,6 +33,7 @@
 
       <el-form-item>
         <el-button type="primary" @click="ensureOrder(orderDetail)">确认订单</el-button>
+        <el-button type="primary" @click="cancelOrder(orderDetail)">取消订单</el-button>
       </el-form-item>
 
     </el-form>
@@ -92,13 +93,13 @@ export default {
   created() {
     console.info(this.orderInfo)
     var orderId = this.orderInfo.orderId
-    this.info(orderId)
+    this.info(orderId, this.nowUserId)
   },
 
   methods: {
     // 根据订单id查询订单
-    info(orderId) {
-      info(orderId)
+    info(orderId, nowId) {
+      info(orderId, nowId)
         .then(res => {
           if (res !== null) {
             if (res.success) {
@@ -161,6 +162,9 @@ export default {
             this.$message({
               message: res.message,
               type: 'success'
+            })
+            this.$router.replace({
+              path: '/class/list'
             })
           } else {
             this.$message({

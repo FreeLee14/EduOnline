@@ -17,7 +17,9 @@
               width="180"/>
             <el-table-column
               prop="level"
-              label="等级"/>
+              label="等级">
+              <template slot-scope="scope">{{ getLevel(scope.row.level) }}</template>
+            </el-table-column>
             <el-table-column
               prop="description"
               label="简介"
@@ -166,6 +168,19 @@ export default {
             }
           }
         })
+    },
+    // 映射教师等级
+    getLevel(level) {
+      switch (level) {
+        case 1:
+          return '初级教师'
+        case 2:
+          return '中级教师'
+        case 3:
+          return '高级教师'
+        case 4:
+          return '特级教师'
+      }
     }
   }
 }

@@ -2,40 +2,52 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="userInfo" label-width="80px">
+      <el-form-item label="头像">
+        <el-upload
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          name="avatar"
+          class="avatar-uploader"
+          action="http://127.0.0.1:8001/onlineedu/upload/userAvatar">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"/>
+        </el-upload>
+      </el-form-item>
       <el-form-item v-if="nowRole !== '[STUDENT]'" label="账号">
         <el-input v-model="userInfo.id"/>
       </el-form-item>
-      <el-form-item label="账号">
+      <el-form-item v-if="nowRole === '[STUDENT]'" label="账号">
         <el-input v-model="userInfo.id" :disabled="true"/>
       </el-form-item>
       <el-form-item v-if="nowRole !== '[STUDENT]'" label="姓名">
         <el-input v-model="userInfo.name"/>
       </el-form-item>
-      <el-form-item label="姓名">
+      <el-form-item v-if="nowRole === '[STUDENT]'" label="姓名">
         <el-input v-model="userInfo.name" :disabled="true"/>
       </el-form-item>
       <el-form-item v-if="nowRole !== '[STUDENT]'" label="年龄">
         <el-input v-model="userInfo.age"/>
       </el-form-item>
-      <el-form-item label="年龄">
+      <el-form-item v-if="nowRole === '[STUDENT]'" label="年龄">
         <el-input v-model="userInfo.age" :disabled="true"/>
       </el-form-item>
       <el-form-item v-if="nowRole !== '[STUDENT]'" label="邮箱">
         <el-input v-model="userInfo.email"/>
       </el-form-item>
-      <el-form-item label="邮箱">
+      <el-form-item v-if="nowRole === '[STUDENT]'" label="邮箱">
         <el-input v-model="userInfo.email" :disabled="true"/>
       </el-form-item>
       <el-form-item v-if="userInfo.roleId == 2 && nowRole !== '[STUDENT]' " label="教师等级">
         <el-input v-model="getLevel"/>
       </el-form-item>
-      <el-form-item v-if="userInfo.roleId == 2" label="教师等级">
+      <el-form-item v-if="userInfo.roleId == 2 && nowRole === '[STUDENT]' " clearable label="教师等级">
         <el-input v-model="getLevel" :disabled="true"/>
       </el-form-item>
       <el-form-item v-if="userInfo.roleId == 2 && nowRole !== '[STUDENT]' " label="教师简介">
         <el-input v-model="userInfo.description" type="textarea" />
       </el-form-item>
-      <el-form-item v-if="userInfo.roleId == 2" label="教师简介">
+      <el-form-item v-if="userInfo.roleId == 2 && nowRole === '[STUDENT]'" label="教师简介">
         <el-input v-model="userInfo.description" :disabled="true" type="textarea" />
       </el-form-item>
       <el-form-item v-if="userInfo.roleId == 3" label="所在学校">
@@ -43,7 +55,7 @@
       </el-form-item>
       <el-form-item>
         <!-- 教师只允许管理员和教师来更改信息 -->
-        <el-button v-if="userInfo.roleId == 2 && nowRole !== '[STUDENT]'" type="primary" @click="updateTeacher(userInfo)">更新</el-button>
+        <el-button v-if="userInfo.roleId == 2 && nowRole === '[ADMIN]'" type="primary" @click="updateTeacher(userInfo)">更新</el-button>
         <el-button v-if="userInfo.roleId == 3" type="primary" @click="updateStudent(userInfo)">更新</el-button>
         <el-button v-if="userInfo.roleId == 2" @click="backTeacher">返回</el-button>
         <el-button v-if="userInfo.roleId == 3" @click="backStudent">返回</el-button>
@@ -65,7 +77,8 @@ export default {
         name: '',
         age: 0,
         email: '',
-        description: ''
+        description: '',
+        avatar: ''
       },
       studentInfo: {
         studentId: '',
@@ -74,8 +87,10 @@ export default {
         email: '',
         school: '',
         password: '',
-        avator: ''
-      }
+        avatar: ''
+      },
+      imageUrl: '',
+      avatar: ''
     }
   },
   computed: {
@@ -100,6 +115,7 @@ export default {
   },
   mounted() {
     console.log(this.userInfo)
+    this.imageUrl = 'http://127.0.0.1:8001' + this.userInfo.avatar
   },
 
   methods: {
@@ -114,7 +130,7 @@ export default {
       teacher.description = userInfo.description
       console.log(teacher)
       // 调用axios请求
-      updateTeacher(teacher.teahcerId, teacher.name, teacher.age, teacher.email, teacher.description)
+      updateTeacher(teacher.teahcerId, teacher.name, teacher.age, teacher.email, teacher.description, this.avatar)
         .then(res => {
           if (res !== null) {
             if (res.success) {
@@ -140,7 +156,7 @@ export default {
       this.studentInfo.email = userInfo.email
       this.studentInfo.school = userInfo.school
       this.studentInfo.password = userInfo.password
-      this.studentInfo.avator = ''
+      this.studentInfo.avatar = this.avatar
       console.log(this.studentInfo)
       // 通过axios发送请求
       updateStudent(
@@ -175,10 +191,55 @@ export default {
       this.$router.replace({
         path: '/student/list'
       })
+    },
+    // 图片上传成功后回调的函数
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+      console.info(file)
+      console.info(res)
+      this.avatar = res.data.avatarUrl
+      console.info(this.avatar)
+    },
+    // 上传之前的回调函数
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      // 限制大小为2mb以内
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
     }
   }
 }
 
 </script>
 <style  scoped>
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

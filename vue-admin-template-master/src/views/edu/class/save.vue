@@ -15,8 +15,17 @@
       <el-form-item label="课程名额">
         <el-input v-model="classInfo.quota"/>
       </el-form-item>
-      <el-form-item label="任课教师">
+      <el-form-item v-if="nowRole === '[ADMIN]'" label="任课教师">
         <el-select v-model="classInfo.teacherId" placeholder="选择当前任课教师">
+          <el-option
+            v-for="item in teacherOption"
+            :key="item.teacherId"
+            :label="item.name"
+            :value="item.teacherId"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="nowRole === '[TEACHER]'" label="任课教师">
+        <el-select v-model="classInfo.teacherId" :disabled="true" placeholder="选择当前任课教师">
           <el-option
             v-for="item in teacherOption"
             :key="item.teacherId"
@@ -96,6 +105,9 @@ export default {
     this.$nextTick(function() {
       // 页面渲染完毕加载分页查询的所有教师简略信息，默认显示第一页
       this.queryAllTeacher()
+      if (this.nowRole === '[TEACHER]') {
+        this.classInfo.teacherId = this.nowUserId
+      }
     })
   },
 

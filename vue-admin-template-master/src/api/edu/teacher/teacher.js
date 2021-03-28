@@ -21,7 +21,7 @@ export function info(id) {
   })
 }
 // 更新教师信息
-export function updateTeacher(teacherId, name, age, email, description) {
+export function updateTeacher(teacherId, name, age, email, description, avatar) {
   return request({
     url: '/onlineedu/teacher/update',
     method: 'put',
@@ -30,7 +30,8 @@ export function updateTeacher(teacherId, name, age, email, description) {
       name,
       age,
       email,
-      description
+      description,
+      avatar
     }
   })
 }

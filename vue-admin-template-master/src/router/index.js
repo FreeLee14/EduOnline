@@ -172,6 +172,24 @@ export const constantRouterMap = [
       }
     ]
   },
+  // {
+  //   path: '/test',
+  //   component: Layout,
+  //   redirect: '/test/upload',
+  //   name: '测试组件',
+  //   meta: {
+  //     title: '测试组件',
+  //     icon: 'nested'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'upload',
+  //       component: () => import('@/views/edu/test/testUpload'), // Parent router-view
+  //       name: '头像上传',
+  //       meta: { title: '头像上传', icon: 'tree' }
+  //     }
+  //   ]
+  // },
 
   { path: '*', redirect: '/404', hidden: true },
   // 用户详细信息组件
