@@ -1,8 +1,8 @@
 <!-- 订单管理 -->
 <template >
-  <div v-if="nowRole == '[STUDENT]'" class="app-container">
+  <div v-if="nowRole === '[ADMIN]' || nowRole === '[STUDENT]'" class="app-container">
     <h1 >订单管理</h1>
-    <table v-show="isStudent" align="center" style="height: 1000px">
+    <table align="center" style="height: 1000px">
       <tr>
         <div class="item-nominate">
           <el-table
@@ -29,7 +29,20 @@
               width="350">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="queryOrder(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="deleteOrder(scope.row)">删除</el-button>
+                <el-button type="text" size="small" @click="dialogVisible = true">删除</el-button>
+                <!-- 提示是否删除的弹窗 -->
+                <el-dialog
+                  :modal-append-to-body="false"
+                  :visible.sync="dialogVisible"
+                  :before-close="handleClose"
+                  title="提示"
+                  width="30%">
+                  <span>是否删除此订单</span>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="deleteCart(scope.row)">确 定</el-button>
+                  </span>
+                </el-dialog>
               </template>
             </el-table-column>
           </el-table>
@@ -69,7 +82,10 @@ export default {
       dateLength: 0,
       // 切换分页展示和单一展示具体信息的标识
       flag: true,
-      orderDetail: {}
+      // 订单详情对象
+      orderDetail: {},
+      // 是否弹出弹窗标识
+      dialogVisible: false
     }
   },
 
@@ -133,6 +149,8 @@ export default {
                 message: res.message,
                 type: 'success'
               })
+              // 成功将弹窗关闭
+              this.dialogVisible = false
               this.pageSearchOrder('0')
             } else {
               this.$message({
@@ -167,6 +185,14 @@ export default {
         case 2:
           return '已废弃'
       }
+    },
+    // 关闭弹窗的回调函数
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
     }
   }
 }

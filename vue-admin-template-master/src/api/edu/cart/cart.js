@@ -12,7 +12,7 @@ export function pageSearch(nowId, currentPage, limit) {
   })
 }
 
-// 保存订单
+// 保存购物车
 export function saveToCart(trans, cartInfo) {
   return request({
     url: '/onlineedu/cart/save',
@@ -21,7 +21,7 @@ export function saveToCart(trans, cartInfo) {
     data: cartInfo
   })
 }
-// 删除订单
+// 删除购物车
 export function deleteCart(classId, nowId) {
   return request({
     url: '/onlineedu/cart/delete',

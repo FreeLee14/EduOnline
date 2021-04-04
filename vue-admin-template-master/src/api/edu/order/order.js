@@ -42,7 +42,7 @@ export function saveOrder(trans, orderInfo) {
     data: orderInfo
   })
 }
-// 更新订单（作用是更新订单状态）
+// 更新订单（作用是更新订单状态以及更新订单反馈）
 export function updateOrder(trans, orderInfo) {
   return request({
     url: '/onlineedu/order/update',

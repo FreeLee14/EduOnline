@@ -27,7 +27,20 @@
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="info(scope.row.studentId)">查看</el-button>
                 <!-- 只有管理员有删除权限 -->
-                <el-button v-if="nowRole == '[ADMIN]'" type="text" size="small" @click="deleteStudent(scope.row.studentId)">删除</el-button>
+                <el-button v-if="nowRole == '[ADMIN]'" type="text" size="small" @click="dialogVisible = true">删除</el-button>
+                <!-- 提示是否删除的弹窗 -->
+                <el-dialog
+                  :modal-append-to-body="false"
+                  :visible.sync="dialogVisible"
+                  :before-close="handleClose"
+                  title="提示"
+                  width="30%">
+                  <span>是否删除此学生信息</span>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="deleteStudent(scope.row.studentId)">确 定</el-button>
+                  </span>
+                </el-dialog>
               </template>
             </el-table-column>
           </el-table>
@@ -70,7 +83,9 @@ export default {
       // 切换分页展示和单一展示具体信息的标识
       flag: true,
       userInfo: {},
-      nowId: ''
+      nowId: '',
+      // 是否弹出弹窗标识
+      dialogVisible: false
     }
   },
 
@@ -158,6 +173,8 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              // 成功将弹窗关闭
+              this.dialogVisible = false
               // 删除成功后重新查询后台数据
               this.pageSearchStudent(this.currentPage)
             } else {
@@ -168,6 +185,14 @@ export default {
             }
           }
         })
+    },
+    // 关闭弹窗的回调函数
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
     }
   }
 }

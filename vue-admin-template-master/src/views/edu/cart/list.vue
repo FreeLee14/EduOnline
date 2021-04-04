@@ -29,8 +29,20 @@
               label="操作"
               width="150">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="ensureOrder(scope.row)">结算</el-button>
-                <el-button type="text" size="small" @click="deleteCart(scope.row.classId)">删除</el-button>
+                <el-button type="text" size="small" @click="ensureOrder(scope.row)">结 算</el-button>
+                <el-button type="text" size="small" @click="dialogVisible = true">删 除</el-button>
+                <!-- 提示是否删除的弹窗 -->
+                <el-dialog
+                  :visible.sync="dialogVisible"
+                  :before-close="handleClose"
+                  title="提示"
+                  width="30%">
+                  <span>是否删除此购物车记录</span>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="deleteCart(scope.row.classId)">确 定</el-button>
+                  </span>
+                </el-dialog>
               </template>
             </el-table-column>
           </el-table>
@@ -80,7 +92,9 @@ export default {
         studentId: '',
         classId: '',
         status: ''
-      }
+      },
+      // 弹窗显示变量
+      dialogVisible: false
     }
   },
 
@@ -147,6 +161,8 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              // 成功将弹窗关闭
+              this.dialogVisible = false
               this.pageSearchCart('0')
             } else {
               this.$message({
@@ -198,6 +214,14 @@ export default {
           }
         }
       })
+    },
+    // 关闭弹窗的回调函数
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done()
+        })
+        .catch(_ => {})
     }
   }
 }
