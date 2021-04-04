@@ -83,7 +83,8 @@ export default {
         orderId: '',
         studentId: '',
         classId: '',
-        status: ''
+        status: '',
+        feedBack: 0
       },
       // 购物车保存传递参数
       cartParam: {
@@ -150,7 +151,7 @@ export default {
       var time = new Date()
       console.info(time)
       // 订单编号根据当前的时间戳
-      this.orderInfo.orderId = 'Edu' + time.getFullYear() + '' + (time.getMonth() + 1) + '' + time.getDay() + '' + time.getHours() + '' + time.getMinutes() + '' + time.getSeconds()
+      this.orderInfo.orderId = 'Edu' + time.getFullYear() + '' + (time.getMonth() + 1) + '' + time.getDay() + '' + time.getHours() + '' + time.getMinutes() + '' + time.getSeconds() + '' + time.getMilliseconds()
       this.orderInfo.classId = classInfo.classId
       // 由于只有学生才可以进行下订单，所以将当前id赋值为学生id
       this.orderInfo.studentId = this.nowUserId

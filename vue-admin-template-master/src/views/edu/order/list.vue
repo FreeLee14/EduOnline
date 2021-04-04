@@ -2,6 +2,9 @@
 <template >
   <div v-if="nowRole === '[ADMIN]' || nowRole === '[STUDENT]'" class="app-container">
     <h1 >订单管理</h1>
+    <el-badge v-if="nowRole === '[ADMIN]'" :value="feedBackNumber"  class="feedback">
+      <el-button @click="pageSearchReturnOrder" size="small">退单数量</el-button>
+    </el-badge>
     <table align="center" style="height: 1000px">
       <tr>
         <div class="item-nominate">
@@ -51,11 +54,20 @@
       <tr>
         <!-- current-change是当前标签发生变化时触发此方法 -->
         <el-pagination
+           v-if="!isReturnOrder"
           :hide-on-single-page="value"
           :page-size="limit"
           :total="tableDateLength"
           layout="prev, pager, next"
           @current-change="pageSearchOrder"/>
+          <!-- current-change是当前标签发生变化时触发此方法 -->
+        <el-pagination
+           v-else
+          :hide-on-single-page="value"
+          :page-size="limit"
+          :total="tableDateLength"
+          layout="prev, pager, next"
+          @current-change="pageSearchReturnOrder"/>
       </tr>
     </table>
   </div>
@@ -63,7 +75,7 @@
 </template>
 
 <script>
-import { info, deleteOrder, pageSearch } from '@/api/edu/order/order'
+import { info, deleteOrder, pageSearch, feedbackNumber } from '@/api/edu/order/order'
 export default {
 
   components: {},
@@ -85,7 +97,11 @@ export default {
       // 订单详情对象
       orderDetail: {},
       // 是否弹出弹窗标识
-      dialogVisible: false
+      dialogVisible: false,
+      // 退单数量
+      feedBackNumber: 0,
+      // 显示所有订单|退订订单信息的切换变量
+      isReturnOrder: false
     }
   },
 
@@ -112,7 +128,7 @@ export default {
   },
   created() {
     console.info(this.nowRole)
-    if (this.nowRole === '[STUDENT]') {
+    if (this.nowRole === '[STUDENT]' || this.nowRole === '[ADMIN]') {
       console.info(this.nowRole)
       this.isStudent = true
       this.pageSearchOrder('0')
@@ -172,6 +188,8 @@ export default {
               this.tableData = res.data.rows
               // 每次翻页也要获取总记录数，进行一个动态的更新
               this.tableDateLength = res.data.total
+              // 赋值退订数量
+              this.feedBackNumber = res.data.feedBackNumber
             }
           }
         })
@@ -193,6 +211,23 @@ export default {
           done()
         })
         .catch(_ => {})
+    },
+    pageSearchReturnOrder() {
+      this.isReturnOrder = !this.isReturnOrder
+      if (this.isReturnOrder) {
+        feedbackNumber(this.currentPage, this.limit)
+          .then(res => {
+            if (res !== null) {
+              if (res.success) {
+                this.tableData = res.data.rows
+                // 每次翻页也要获取总记录数，进行一个动态的更新
+                this.tableDateLength = res.data.total
+              }
+            }
+          })
+      } else {
+        this.pageSearchOrder('0')
+      }
     }
   }
 }
@@ -236,5 +271,9 @@ export default {
 }
 .page{
   position: relative;
+}
+.feedback{
+  position: relative;
+  left: 1500px;
 }
 </style>

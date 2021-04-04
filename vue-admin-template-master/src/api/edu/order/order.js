@@ -51,3 +51,32 @@ export function updateOrder(trans, orderInfo) {
     data: orderInfo
   })
 }
+// 分页获取所有处于申请退订反馈状态的订单数量
+export function feedbackNumber(currentPage, limit) {
+  return request({
+    url: '/onlineedu/order/feedbackNumber',
+    method: 'get',
+    params: {
+      currentPage,
+      limit
+    }
+  })
+}
+// 更新订单（作用是更新订单状态以及更新订单反馈）
+export function updateFeedback(trans, orderInfo) {
+  return request({
+    url: '/onlineedu/order/updateFeedback',
+    method: 'post',
+    transformRequest: trans,
+    data: orderInfo
+  })
+}
+// 申请退单
+export function applyReturnOrder(trans, orderInfo) {
+  return request({
+    url: '/onlineedu/order/applyReturnOrder',
+    method: 'post',
+    transformRequest: trans,
+    data: orderInfo
+  })
+}
