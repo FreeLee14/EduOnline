@@ -11,6 +11,22 @@
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"/>
     </el-upload>
+    <el-upload
+      ref="upload"
+      :on-change="changeName"
+      :before-upload="beforeUpload"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      :file-list="fileList"
+      :auto-upload="false"
+      class="upload-demo"
+      action="http://127.0.0.1:8001/onlineedu/upload/uploadFiles">
+      <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+      <div slot="tip" class="el-upload__tip">只能上传doc文件，且不超过10MB</div>
+    </el-upload>
+
+    <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
   </div>
 </template>
 
@@ -23,7 +39,13 @@ export default {
     return {
       imageUrl: 'http://127.0.0.1:8001/user/avatar/cool.jpg',
       imageName: '',
-      imgInfo: ''
+      imgInfo: '',
+      fileList: [
+        {
+          name: '',
+          url: ''
+        }
+      ]
     }
   },
 
@@ -56,10 +78,44 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
       return isJPG && isLt2M
+    },
+    // 提交文件
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+    beforeUpload(file) {
+      console.log(file)
+      var fileName = file.name
+      if (fileName.search('docx') !== -1 || fileName.search('doc') !== -1) {
+        if (fileName.indexOf('$') === -1) {
+          console.info('...')
+          // file.name = '202109933$' + fileName
+        }
+      }
+    },
+    changeName(file, fileList) {
+      console.log(file)
+      var fileName = file.name
+      console.log(file.name)
+      if (fileName.search('docx') !== -1 || fileName.search('doc') !== -1) {
+        if (fileName.indexOf('$') === -1) {
+          console.info('...')
+          file.name = '202109933$' + fileName
+        }
+      } else {
+        this.$message.error('当前文件格式必须为docx或doc格式文件!')
+        // 将页面回显的file内容从数组中弹出
+        fileList.pop()
+      }
     }
   }
 }
-
 </script>
 <style  scoped>
 .avatar-uploader .el-upload {

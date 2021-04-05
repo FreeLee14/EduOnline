@@ -2,8 +2,8 @@
 <template >
   <div v-if="nowRole === '[ADMIN]' || nowRole === '[STUDENT]'" class="app-container">
     <h1 >订单管理</h1>
-    <el-badge v-if="nowRole === '[ADMIN]'" :value="feedBackNumber"  class="feedback">
-      <el-button @click="pageSearchReturnOrder" size="small">退单数量</el-button>
+    <el-badge v-if="nowRole === '[ADMIN]'" :value="feedBackNumber" class="feedback">
+      <el-button size="small" @click="pageSearchReturnOrder">退单数量</el-button>
     </el-badge>
     <table align="center" style="height: 1000px">
       <tr>
@@ -54,15 +54,15 @@
       <tr>
         <!-- current-change是当前标签发生变化时触发此方法 -->
         <el-pagination
-           v-if="!isReturnOrder"
+          v-if="!isReturnOrder"
           :hide-on-single-page="value"
           :page-size="limit"
           :total="tableDateLength"
           layout="prev, pager, next"
           @current-change="pageSearchOrder"/>
-          <!-- current-change是当前标签发生变化时触发此方法 -->
+        <!-- current-change是当前标签发生变化时触发此方法 -->
         <el-pagination
-           v-else
+          v-else
           :hide-on-single-page="value"
           :page-size="limit"
           :total="tableDateLength"

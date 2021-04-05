@@ -4,19 +4,19 @@
     <h1>订单详情</h1>
     <el-form ref="form" :model="orderDetail" label-width="80px">
       <el-form-item label="订单号">
-        <el-input style="width: 400px"  v-model="orderDetail.orderId" :disabled="true"/>
+        <el-input v-model="orderDetail.orderId" :disabled="true" style="width: 400px"/>
       </el-form-item>
       <el-form-item label="课程名称">
-        <el-input style="width: 400px" v-model="orderDetail.className" :disabled="true"/>
+        <el-input v-model="orderDetail.className" :disabled="true" style="width: 400px"/>
       </el-form-item>
       <el-form-item label="创建时间">
-        <el-input style="width: 400px" v-model="orderDetail.createTime" :disabled="true"/>
+        <el-input v-model="orderDetail.createTime" :disabled="true" style="width: 400px"/>
       </el-form-item>
       <el-form-item label="更新时间">
-        <el-input style="width: 400px" v-model="orderDetail.updateTime" :disabled="true"/>
+        <el-input v-model="orderDetail.updateTime" :disabled="true" style="width: 400px"/>
       </el-form-item>
       <el-form-item label="订单状态">
-        <el-select style="width: 400px" v-model="orderDetail.status" :disabled="true" >
+        <el-select v-model="orderDetail.status" :disabled="true" style="width: 400px" >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -25,10 +25,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="订单价格">
-        <el-input style="width: 400px" v-model="orderDetail.price" :disabled="true"/>
+        <el-input v-model="orderDetail.price" :disabled="true" style="width: 400px"/>
       </el-form-item>
       <el-form-item label="订单反馈">
-        <el-select  v-model="orderDetail.feedBack" :disabled="!isAdmin" >
+        <el-select v-model="orderDetail.feedBack" :disabled="!isAdmin" >
           <el-option
             v-for="item in feedBackOptions"
             :key="item.value"
@@ -38,7 +38,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="back">返 回</el-button>
-        <el-button type="primary" v-show="isAdmin" @click="updateFeedback">更 新</el-button>
+        <el-button v-show="isAdmin" type="primary" @click="updateFeedback">更 新</el-button>
         <el-button v-show="!isAdmin && orderDetail.status === 1" type="primary" @click="dialogVisible = true">申请退单</el-button>
       </el-form-item>
       <!-- 提示是否删除的弹窗 -->
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { updateOrder, updateFeedback, applyReturnOrder } from '@/api/edu/order/order'
+import { updateFeedback, applyReturnOrder } from '@/api/edu/order/order'
 import qs from 'qs'
 export default {
 
@@ -79,7 +79,7 @@ export default {
       }],
       feedBackOptions: [{
         value: 0,
-        label: '无反馈'},
+        label: '无反馈' },
       {
         value: 1,
         label: '申请退单'
@@ -153,14 +153,14 @@ export default {
         if (res !== null) {
           if (res.success) {
             this.$message({
-              message: "申请成功",
+              message: '申请成功',
               type: 'success'
             })
             // 成功后关闭弹窗
             this.dialogVisible = false
           } else {
             this.$message({
-              methods: "申请失败",
+              methods: '申请失败',
               type: 'warning'
             })
           }
