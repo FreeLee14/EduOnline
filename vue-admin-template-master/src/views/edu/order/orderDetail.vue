@@ -39,6 +39,7 @@
       <el-form-item>
         <el-button type="primary" @click="back">返 回</el-button>
         <el-button v-show="isAdmin" type="primary" @click="updateFeedback">更 新</el-button>
+        <el-button v-show="!isAdmin && orderDetail.status === 1" type="primary" @click="fileDownloadDialogVisible = true">资料下载</el-button>
         <el-button v-show="!isAdmin && orderDetail.status === 1" type="primary" @click="dialogVisible = true">申请退单</el-button>
       </el-form-item>
       <!-- 提示是否删除的弹窗 -->
@@ -51,6 +52,20 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="applyChargeBack()">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- 提示下载资料 -->
+      <el-dialog
+        :visible.sync="fileDownloadDialogVisible"
+        :before-close="handleClose"
+        title="课程资料下载"
+        width="30%">
+        <a v-for="item in orderDetail.file" :key="item" :href="getFileHref(item)">{{item.substring(item.indexOf('\\') + 1)}}</a>
+        <span v-if="orderDetail.file.length === 0">
+          <h1>当前课程没有资料可供下载</h1>
+        </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="fileDownloadDialogVisible = false">取 消</el-button>
         </span>
       </el-dialog>
     </el-form>
@@ -92,6 +107,8 @@ export default {
       }],
       // 弹窗显示标识
       dialogVisible: false,
+      // 文件下载弹窗标识
+      fileDownloadDialogVisible: false,
       // 申请退单的传参
       orderParam: {
         orderId: '',
@@ -124,6 +141,8 @@ export default {
       this.isAdmin = true
     }
     console.info(this.isAdmin)
+    // this.fileList = this.orderDetail.file
+    console.info(this.orderDetail.file)
   },
 
   methods: {
@@ -208,6 +227,11 @@ export default {
           }
         }
       })
+    },
+    getFileHref(filePath) {
+      console.log(filePath)
+      // debugger
+      return "http://localhost:8001/classInfo/" + filePath
     }
   }
 }

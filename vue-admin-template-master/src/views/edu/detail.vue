@@ -14,49 +14,31 @@
           <i v-else class="el-icon-plus avatar-uploader-icon"/>
         </el-upload>
       </el-form-item>
-      <el-form-item v-if="nowRole !== '[STUDENT]'" label="账号">
-        <el-input v-model="userInfo.id"/>
+      <el-form-item label="账号">
+        <el-input v-model="userInfo.id" :disabled="!isAdmin"/>
       </el-form-item>
-      <el-form-item v-if="nowRole === '[STUDENT]'" label="账号">
-        <el-input v-model="userInfo.id" :disabled="true"/>
+      <el-form-item label="姓名">
+        <el-input v-model="userInfo.name" :disabled="!isAdmin"/>
       </el-form-item>
-      <el-form-item v-if="nowRole !== '[STUDENT]'" label="姓名">
-        <el-input v-model="userInfo.name"/>
+      <el-form-item label="年龄">
+        <el-input v-model="userInfo.age" :disabled="!isAdmin"/>
       </el-form-item>
-      <el-form-item v-if="nowRole === '[STUDENT]'" label="姓名">
-        <el-input v-model="userInfo.name" :disabled="true"/>
+      <el-form-item label="邮箱">
+        <el-input v-model="userInfo.email" :disabled="!isAdmin"/>
       </el-form-item>
-      <el-form-item v-if="nowRole !== '[STUDENT]'" label="年龄">
-        <el-input v-model="userInfo.age"/>
+      <el-form-item v-if="userInfo.roleId == 2" clearable label="教师等级">
+        <el-input v-model="getLevel" :disabled="!isAdmin"/>
       </el-form-item>
-      <el-form-item v-if="nowRole === '[STUDENT]'" label="年龄">
-        <el-input v-model="userInfo.age" :disabled="true"/>
-      </el-form-item>
-      <el-form-item v-if="nowRole !== '[STUDENT]'" label="邮箱">
-        <el-input v-model="userInfo.email"/>
-      </el-form-item>
-      <el-form-item v-if="nowRole === '[STUDENT]'" label="邮箱">
-        <el-input v-model="userInfo.email" :disabled="true"/>
-      </el-form-item>
-      <el-form-item v-if="userInfo.roleId == 2 && nowRole !== '[STUDENT]' " label="教师等级">
-        <el-input v-model="getLevel"/>
-      </el-form-item>
-      <el-form-item v-if="userInfo.roleId == 2 && nowRole === '[STUDENT]' " clearable label="教师等级">
-        <el-input v-model="getLevel" :disabled="true"/>
-      </el-form-item>
-      <el-form-item v-if="userInfo.roleId == 2 && nowRole !== '[STUDENT]' " label="教师简介">
-        <el-input v-model="userInfo.description" type="textarea" />
-      </el-form-item>
-      <el-form-item v-if="userInfo.roleId == 2 && nowRole === '[STUDENT]'" label="教师简介">
-        <el-input v-model="userInfo.description" :disabled="true" type="textarea" />
+      <el-form-item v-if="userInfo.roleId == 2" label="教师简介">
+        <el-input v-model="userInfo.description" :disabled="!isAdmin" type="textarea" />
       </el-form-item>
       <el-form-item v-if="userInfo.roleId == 3" label="所在学校">
-        <el-input v-model="userInfo.school"/>
+        <el-input v-model="userInfo.school" :disabled="!isAdmin"/>
       </el-form-item>
       <el-form-item>
         <!-- 教师只允许管理员和教师来更改信息 -->
         <el-button v-if="userInfo.roleId == 2 && nowRole === '[ADMIN]'" type="primary" @click="updateTeacher(userInfo)">更新</el-button>
-        <el-button v-if="userInfo.roleId == 3" type="primary" @click="updateStudent(userInfo)">更新</el-button>
+        <el-button v-if="userInfo.roleId == 3 && nowRole === '[ADMIN]'" type="primary" @click="updateStudent(userInfo)">更新</el-button>
         <el-button v-if="userInfo.roleId == 2" @click="backTeacher">返回</el-button>
         <el-button v-if="userInfo.roleId == 3" @click="backStudent">返回</el-button>
       </el-form-item>
@@ -90,7 +72,9 @@ export default {
         avatar: ''
       },
       imageUrl: '',
-      avatar: ''
+      avatar: '',
+      // 管理员权限标识
+      isAdmin: false
     }
   },
   computed: {
@@ -116,6 +100,14 @@ export default {
   mounted() {
     console.log(this.userInfo)
     this.imageUrl = 'http://127.0.0.1:8001' + this.userInfo.avatar
+    this.$nextTick(function() {
+      // 设置权限标识
+      if (this.nowRole === '[ADMIN]') {
+        this.isAdmin = true
+      } else if (this.nowRole === '[STUDENT]') {
+        this.isStudent = true
+      }
+    })
   },
 
   methods: {

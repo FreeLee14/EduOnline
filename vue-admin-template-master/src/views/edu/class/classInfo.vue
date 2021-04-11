@@ -37,6 +37,48 @@
             :value="item.value"/>
         </el-select>
       </el-form-item>
+      <el-form-item label="上课日期">
+        <el-select placeholder="星期几" v-model="classInfo.scheduleDate" :disabled="!isAdmin">
+          <el-option
+            v-for="item in dateOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="上课开始时间" label-width="100px">
+        <el-time-select
+          placeholder="开始时间"
+          v-model="classInfo.scheduleStart"
+          :picker-options="{
+            start: '08:30',
+            step: '00:15',
+            end: '22:30',
+          }"
+          :disabled="!isAdmin"
+          style="width:180px"
+        >
+        </el-time-select>
+      </el-form-item>
+      <el-form-item label="上课结束时间" label-width="100px">
+        <el-time-select
+          placeholder="结束时间"
+          v-model="classInfo.scheduleEnd"
+          :picker-options="{
+            start: '08:30',
+            step: '00:15',
+            end: '23:30',
+            minTime: classInfo.scheduleStart,
+          }"
+          :disabled="!isAdmin"
+          style="width:180px"
+        >
+        </el-time-select>
+      </el-form-item>
+      <el-form-item label="课时">
+        <el-input v-model="classInfo.classHour" type="input" :disabled="!isAdmin" style="width: 200px" />
+      </el-form-item>
       <el-form-item label="课程简介">
         <el-input v-model="classInfo.description" :disabled="!isAdmin" type="textarea" />
       </el-form-item>
@@ -78,6 +120,36 @@ export default {
         value: 3,
         label: '已结课'
       }],
+      dateOption: [
+        {
+          value: '1',
+          label: '周一'
+        },
+        {
+          value: '2',
+          label: '周二'
+        },
+        {
+          value: '3',
+          label: '周三'
+        },
+        {
+          value: '4',
+          label: '周四'
+        },
+        {
+          value: '5',
+          label: '周五'
+        },
+        {
+          value: '6',
+          label: '周六'
+        },
+        {
+          value: '7',
+          label: '周日'
+        }
+      ],
       // 订单信息
       orderInfo: {
         orderId: '',

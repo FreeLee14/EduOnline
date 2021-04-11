@@ -32,7 +32,7 @@
               width="350">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="queryOrder(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="dialogVisible = true">删除</el-button>
+                <el-button type="text" v-show="nowRole === '[STUDENT]'" size="small" @click="dialogVisible = true">删除</el-button>
                 <!-- 提示是否删除的弹窗 -->
                 <el-dialog
                   :modal-append-to-body="false"

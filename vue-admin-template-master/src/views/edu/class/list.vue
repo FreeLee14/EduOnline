@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <h1>课程管理</h1>
-    <table v-show="flag" style="height: 800px">
-      <tr>
+    <table v-show="flag" style="height: 1000px">
+      <tr style="height: 300px">
         <div class="item-search">
           <td><h2>价格:</h2></td>
           <td >
@@ -46,7 +46,7 @@
           </td>
         </div>
       </tr>
-      <tr>
+      <tr style="text-align: center">
         <div class="item-nominate">
           <el-table
             :data="tableData"
@@ -54,23 +54,28 @@
             <el-table-column
               prop="classId"
               label="课程编号"
-              width="300"/>
+              width="300"
+              align="center"/>
             <el-table-column
               prop="name"
               label="课程名"
-              width="300"/>
+              width="300"
+              align="center"/>
             <el-table-column
               prop="price"
               label="课程价格"
-              width="200"/>
+              width="200"
+              align="center"/>
             <el-table-column
               prop="quota"
               label="课程名额"
-              width="350"/>
+              width="350"
+              align="center"/>
             <el-table-column
               fixed="right"
               label="操作"
-              width="350">
+              width="350"
+              align="center">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="info(scope.row.classId)">查看</el-button>
                 <!-- 只有管理员有删除权限 -->
@@ -93,7 +98,7 @@
           </el-table>
         </div>
       </tr>
-      <tr>
+      <tr style="height: 300px">
         <!-- current-change是当前标签发生变化时触发此方法 -->
         <el-pagination
           v-if="!isTeacher"
