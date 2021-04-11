@@ -74,6 +74,7 @@
 <script>
 import { saveClass } from '@/api/edu/class/class'
 import { queryAllTeacher } from '@/api/edu/teacher/teacher'
+import axios from 'axios'
 import qs from 'qs'
 export default {
 
@@ -120,12 +121,10 @@ export default {
       },
       // 当前用户id
       nowId: '',
-      fileList: [
-        {
-          name: '',
-          url: ''
-        }
-      ]
+      fileList: [],
+      file: {
+        name: ''
+      }
     }
   },
   computed: {
@@ -174,6 +173,14 @@ export default {
       this.classInfo.status = ''
     },
     submit(classInfo) {
+      const config = {
+        'Content-Type': 'multipart/form-data'
+      }
+      const formData = new FormData()
+      // debugger
+      console.info(this.fileList[0].raw)
+      formData.append('file', this.fileList[0].raw)
+      formData.append('name', this.file.name)
       this.nowId = this.nowUserId
       // 保存课程信息
       saveClass(
@@ -187,15 +194,26 @@ export default {
       ).then(res => {
         if (res !== null) {
           if (res.success) {
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
+            // this.$message({
+            //   message: '保存成功',
+            //   type: 'success'
+            // })
             // 提交文件
-            this.$refs.upload.submit()
+            // this.$refs.upload.submit()
+            axios.post('http://localhost:8001/onlineedu/upload/uploadFiles', formData, config)
+              .then(response => {
+                if (response !== null) {
+                  debugger
+                  if (response.data.success) {
+                    this.$message.success('保存成功')
+                  } else {
+                    this.$message.error('文件上传失败!')
+                  }
+                }
+              })
           } else {
             this.$message({
-              message: '保存失败',
+              message: res.message,
               type: 'warning'
             })
           }
@@ -222,6 +240,9 @@ export default {
       if (fileName.search('docx') !== -1 || fileName.search('doc') !== -1) {
         if (fileName.indexOf('$') === -1) {
           file.name = this.classInfo.classId + '$' + fileName
+          // 每次文件发生改变时需要对临时变量进行赋值
+          this.file = file
+          this.fileList = fileList
         }
       } else {
         this.$message.error('当前文件格式必须为docx或doc格式文件!')

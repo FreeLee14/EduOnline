@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import { uploadAvatar } from '@/api/upload'
+import { uploadAvatar, uploadFiles } from '@/api/upload'
+import axios from 'axios'
 export default {
 
   components: {},
@@ -40,12 +41,12 @@ export default {
       imageUrl: 'http://127.0.0.1:8001/user/avatar/cool.jpg',
       imageName: '',
       imgInfo: '',
-      fileList: [
-        {
-          name: '',
-          url: ''
-        }
-      ]
+      fileList: [],
+      // 上传文件的临时变量
+      file: {
+        raw: {},
+        name: ''
+      }
     }
   },
 
@@ -81,7 +82,36 @@ export default {
     },
     // 提交文件
     submitUpload() {
-      this.$refs.upload.submit()
+      // this.$refs.upload.submit()
+      const formData = new FormData()
+      // debugger
+      console.info(this.fileList[0].raw)
+      formData.append('file', this.fileList[0].raw)
+      formData.append('name', this.file.name)
+      // uploadFiles(formData)
+      //   .then(res => {
+      //     if (res !== null) {
+      //       if (res.success) {
+      //         this.$message.success('成功上传文件！！')
+      //       } else {
+      //         this.$message.error('文件上传失败!')
+      //       }
+      //     }
+      //   })
+      const config = {
+        'Content-Type': 'multipart/form-data'
+      }
+      axios.post('http://localhost:8001/onlineedu/upload/uploadFiles', formData, config)
+        .then(res => {
+          if (res !== null) {
+            debugger
+            if (res.data.success) {
+              this.$message.success('成功上传文件！！')
+            } else {
+              this.$message.error('文件上传失败!')
+            }
+          }
+        })
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)
@@ -108,6 +138,8 @@ export default {
           console.info('...')
           file.name = '202109933$' + fileName
         }
+        this.file = file
+        this.fileList = fileList
       } else {
         this.$message.error('当前文件格式必须为docx或doc格式文件!')
         // 将页面回显的file内容从数组中弹出
