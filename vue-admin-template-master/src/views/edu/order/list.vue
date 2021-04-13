@@ -43,7 +43,7 @@
                   <span>是否删除此订单</span>
                   <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="deleteCart(scope.row)">确 定</el-button>
+                    <el-button type="primary" @click="deleteOrder(scope.row)">确 定</el-button>
                   </span>
                 </el-dialog>
               </template>

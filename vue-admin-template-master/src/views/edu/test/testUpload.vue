@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { uploadAvatar, uploadFiles } from '@/api/upload'
+import { uploadAvatar } from '@/api/upload'
 import axios from 'axios'
 export default {
 

@@ -58,7 +58,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="scheduleDate" label="上课日期" >
-        <el-select placeholder="星期几" v-model="classInfo.scheduleDate">
+        <el-select v-model="classInfo.scheduleDate" placeholder="星期几">
           <el-option
             v-for="item in dateOption"
             :key="item.value"
@@ -69,20 +69,18 @@
       </el-form-item>
       <el-form-item prop="scheduleStart" label="上课开始时间" label-width="100px">
         <el-time-select
-          placeholder="开始时间"
           v-model="classInfo.scheduleStart"
           :picker-options="{
             start: '08:30',
             step: '00:15',
             end: '22:30',
           }"
+          placeholder="开始时间"
           style="width:180px"
-        >
-        </el-time-select>
+        />
       </el-form-item>
       <el-form-item prop="scheduleEnd" label="上课结束时间" label-width="100px">
         <el-time-select
-          placeholder="结束时间"
           v-model="classInfo.scheduleEnd"
           :picker-options="{
             start: '08:30',
@@ -90,9 +88,9 @@
             end: '23:30',
             minTime: classInfo.scheduleStart,
           }"
+          placeholder="结束时间"
           style="width:180px"
-        >
-        </el-time-select>
+        />
       </el-form-item>
       <el-form-item prop="classHour" label="课时">
         <el-input v-model="classInfo.classHour" type="input" style="width: 200px" />
@@ -112,8 +110,11 @@
           class="upload-demo"
           action="http://127.0.0.1:8001/onlineedu/upload/uploadFiles"
         >
-          <el-button slot="trigger" size="small" type="primary"
-            >选取文件</el-button
+          <el-button
+            slot="trigger"
+            size="small"
+            type="primary"
+          >选取文件</el-button
           >
           <div slot="tip" class="el-upload__tip">
             只能上传doc文件，且不超过10MB
@@ -131,27 +132,27 @@
 </template>
 
 <script>
-import { saveClass } from "@/api/edu/class/class";
-import { queryAllTeacher } from "@/api/edu/teacher/teacher";
-import axios from "axios";
-import qs from "qs";
+import { saveClass } from '@/api/edu/class/class'
+import { queryAllTeacher } from '@/api/edu/teacher/teacher'
+import axios from 'axios'
+import qs from 'qs'
 export default {
   components: {},
   data() {
     return {
       options: [
         {
-          value: "1",
-          label: "未开课",
+          value: '1',
+          label: '未开课'
         },
         {
-          value: "2",
-          label: "已开课",
+          value: '2',
+          label: '已开课'
         },
         {
-          value: "3",
-          label: "已结课",
-        },
+          value: '3',
+          label: '已结课'
+        }
       ],
       dateOption: [
         {
@@ -185,61 +186,61 @@ export default {
       ],
       teacherOption: [],
       classInfo: {
-        classId: "",
-        name: "",
-        price: "",
-        quota: "",
-        teacherId: "",
-        status: "",
-        description: "",
-        scheduleDate: "",
-        scheduleStart: "",
-        scheduleEnd: "",
-        classHour: "",
+        classId: '',
+        name: '',
+        price: '',
+        quota: '',
+        teacherId: '',
+        status: '',
+        description: '',
+        scheduleDate: '',
+        scheduleStart: '',
+        scheduleEnd: '',
+        classHour: ''
       },
       // 进行表单的整体校验
       rules: {
         classId: [
-          { required: true, message: "课程编号不能为空", trigger: "blur" },
+          { required: true, message: '课程编号不能为空', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: "课程名称不能为空", trigger: "blur" },
+          { required: true, message: '课程名称不能为空', trigger: 'blur' }
         ],
-        price: [{ required: true, message: "价格不能为空", trigger: "blur" }],
-        quota: [{ required: true, message: "名额不能为空", trigger: "blur" }],
+        price: [{ required: true, message: '价格不能为空', trigger: 'blur' }],
+        quota: [{ required: true, message: '名额不能为空', trigger: 'blur' }],
         status: [
-          { required: true, message: "课程状态必须填写", trigger: "change" },
-        ],
+          { required: true, message: '课程状态必须填写', trigger: 'change' }
+        ]
       },
       // 当前用户id
-      nowId: "",
+      nowId: '',
       fileList: [],
       file: {
-        name: "",
-      },
-    };
+        name: ''
+      }
+    }
   },
   computed: {
     // 获取当前用户权限
     nowRole: {
       get() {
-        return this.$store.getters.roles;
-      },
+        return this.$store.getters.roles
+      }
     },
     nowUserId: {
       get() {
-        return this.$store.getters.userId;
-      },
-    },
+        return this.$store.getters.userId
+      }
+    }
   },
   mounted() {
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       // 页面渲染完毕加载分页查询的所有教师简略信息，默认显示第一页
-      this.queryAllTeacher();
-      if (this.nowRole === "[TEACHER]") {
-        this.classInfo.teacherId = this.nowUserId;
+      this.queryAllTeacher()
+      if (this.nowRole === '[TEACHER]') {
+        this.classInfo.teacherId = this.nowUserId
       }
-    });
+    })
   },
 
   methods: {
@@ -248,37 +249,37 @@ export default {
       queryAllTeacher().then((res) => {
         if (res !== null) {
           if (res.success) {
-            this.teacherOption = res.data.rows;
+            this.teacherOption = res.data.rows
           }
         }
-      });
+      })
     },
     // 取消方法，将所有的内容至null
     cancle() {
-      this.classInfo.classId = "";
-      this.classInfo.name = "";
-      this.classInfo.price = "";
-      this.classInfo.quota = "";
-      this.classInfo.teacherId = "";
-      this.classInfo.description = "";
-      this.classInfo.status = "";
+      this.classInfo.classId = ''
+      this.classInfo.name = ''
+      this.classInfo.price = ''
+      this.classInfo.quota = ''
+      this.classInfo.teacherId = ''
+      this.classInfo.description = ''
+      this.classInfo.status = ''
     },
     submit(classInfo) {
       const config = {
-        "Content-Type": "multipart/form-data",
-      };
-      const formData = new FormData();
+        'Content-Type': 'multipart/form-data'
+      }
+      const formData = new FormData()
       // debugger
-      console.info(this.fileList[0].raw);
-      formData.append("file", this.fileList[0].raw);
-      formData.append("name", this.file.name);
-      this.nowId = this.nowUserId;
+      console.info(this.fileList[0].raw)
+      formData.append('file', this.fileList[0].raw)
+      formData.append('name', this.file.name)
+      this.nowId = this.nowUserId
       // 保存课程信息
       saveClass(
         [
-          function (data) {
-            return qs.stringify(data);
-          },
+          function(data) {
+            return qs.stringify(data)
+          }
         ],
         this.nowId,
         classInfo
@@ -293,61 +294,61 @@ export default {
             // this.$refs.upload.submit()
             axios
               .post(
-                "http://localhost:8001/onlineedu/upload/uploadFiles",
+                'http://localhost:8001/onlineedu/upload/uploadFiles',
                 formData,
                 config
               )
               .then((response) => {
                 if (response !== null) {
-                  debugger;
+                  debugger
                   if (response.data.success) {
-                    this.$message.success("保存成功");
+                    this.$message.success('保存成功')
                   } else {
-                    this.$message.error("文件上传失败!");
+                    this.$message.error('文件上传失败!')
                   }
                 }
-              });
+              })
           } else {
             this.$message({
               message: res.message,
-              type: "warning",
-            });
+              type: 'warning'
+            })
           }
         }
-      });
+      })
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      console.log(file, fileList)
     },
     handlePreview(file) {
-      console.log(file);
+      console.log(file)
     },
     beforeUpload(file) {
-      console.log(file);
-      const isLt2M = file.size / 1024 / 1024 <= 10;
+      console.log(file)
+      const isLt2M = file.size / 1024 / 1024 <= 10
       if (!isLt2M) {
-        this.$message.error("上传文件大小不能超过 10MB!");
+        this.$message.error('上传文件大小不能超过 10MB!')
       }
-      return isLt2M;
+      return isLt2M
     },
     changeName(file, fileList) {
-      console.log(file);
-      var fileName = file.name;
-      if (fileName.search("docx") !== -1 || fileName.search("doc") !== -1) {
-        if (fileName.indexOf("$") === -1) {
-          file.name = this.classInfo.classId + "$" + fileName;
+      console.log(file)
+      var fileName = file.name
+      if (fileName.search('docx') !== -1 || fileName.search('doc') !== -1) {
+        if (fileName.indexOf('$') === -1) {
+          file.name = this.classInfo.classId + '$' + fileName
           // 每次文件发生改变时需要对临时变量进行赋值
-          this.file = file;
-          this.fileList = fileList;
+          this.file = file
+          this.fileList = fileList
         }
       } else {
-        this.$message.error("当前文件格式必须为docx或doc格式文件!");
+        this.$message.error('当前文件格式必须为docx或doc格式文件!')
         // 将页面回显的file内容从数组中弹出
-        fileList.pop();
+        fileList.pop()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style  scoped>
 </style>

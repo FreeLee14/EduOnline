@@ -60,7 +60,7 @@
         :before-close="handleClose"
         title="课程资料下载"
         width="30%">
-        <a v-for="item in orderDetail.file" :key="item" :href="getFileHref(item)">{{item.substring(item.indexOf('\\') + 1)}}</a>
+        <a v-for="item in orderDetail.file" :key="item" :href="getFileHref(item)">{{ item.substring(item.indexOf('\\') + 1) }}</a>
         <span v-if="orderDetail.file.length === 0">
           <h1>当前课程没有资料可供下载</h1>
         </span>
@@ -231,7 +231,7 @@ export default {
     getFileHref(filePath) {
       console.log(filePath)
       // debugger
-      return "http://localhost:8001/classInfo/" + filePath
+      return 'http://localhost:8001/classInfo/' + filePath
     }
   }
 }

@@ -19,7 +19,10 @@
         <el-input v-model="student.studentId"/>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="student.password"/>
+        <el-input v-model="student.password" type="password"/>
+      </el-form-item>
+      <el-form-item label="确认密码">
+        <el-input v-model="ensurePassword" type="password"/>
       </el-form-item>
       <el-form-item label="姓名">
         <el-input v-model="student.name"/>
@@ -59,7 +62,8 @@ export default {
         school: '',
         avator: ''
       },
-      imageUrl: ''
+      imageUrl: '',
+      ensurePassword: ''
     }
   },
 
@@ -78,6 +82,13 @@ export default {
 
   methods: {
     submit(student) {
+      if (student.password !== this.ensurePassword) {
+        this.$message({
+          message: '前后密码不一致',
+          type: 'warning'
+        })
+        return
+      }
       saveStudent(
         [
           function(data) {
@@ -89,12 +100,12 @@ export default {
         if (res !== null) {
           if (res.success) {
             this.$message({
-              message: '保存成功',
+              message: res.message,
               type: 'success'
             })
           } else {
             this.$message({
-              message: '保存失败',
+              message: res.message,
               type: 'warning'
             })
           }
@@ -109,6 +120,7 @@ export default {
       this.student.school = ''
       this.student.password = ''
       this.student.avator = ''
+      this.ensurePassword = ''
     },
     // 图片上传成功后回调的函数
     handleAvatarSuccess(res, file) {
