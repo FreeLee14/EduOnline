@@ -2,23 +2,11 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :rules="rules" :model="userInfo" label-width="80px">
-      <el-form-item v-if="isAdmin" label="头像">
-        <el-upload
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-          name="avatar"
-          class="avatar-uploader"
-          action="http://127.0.0.1:8001/onlineedu/upload/userAvatar">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"/>
-        </el-upload>
-      </el-form-item>
-      <el-form-item v-else label="头像">
+      <el-form-item prop="avatar" label="头像">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
       </el-form-item>
       <el-form-item prop="id" label="账号">
-        <el-input v-model="userInfo.id" :disabled="!isAdmin"/>
+        <el-input v-model="userInfo.id" :disabled="true"/>
       </el-form-item>
       <el-form-item prop="name" label="姓名">
         <el-input v-model="userInfo.name" :disabled="!isAdmin"/>
@@ -67,7 +55,7 @@ export default {
       teahcerInfo: {
         teahcerId: '',
         name: '',
-        age: 0,
+        age: '',
         email: '',
         description: '',
         avatar: ''
@@ -155,9 +143,10 @@ export default {
           teacher.age = userInfo.age
           teacher.email = userInfo.email
           teacher.description = userInfo.description
+          teacher.avatar = this.userInfo.avatar
           console.log(teacher)
           // 调用axios请求
-          updateTeacher(teacher.teahcerId, teacher.name, teacher.age, teacher.email, teacher.description, this.avatar)
+          updateTeacher(teacher.teahcerId, teacher.name, teacher.age, teacher.email, teacher.description, teacher.avatar)
             .then(res => {
               if (res !== null) {
                 if (res.success) {
@@ -189,7 +178,7 @@ export default {
           this.studentInfo.email = userInfo.email
           this.studentInfo.school = userInfo.school
           this.studentInfo.password = userInfo.password
-          this.studentInfo.avatar = this.avatar
+          this.studentInfo.avatar = this.userInfo.avatar
           console.log(this.studentInfo)
           // 通过axios发送请求
           updateStudent(

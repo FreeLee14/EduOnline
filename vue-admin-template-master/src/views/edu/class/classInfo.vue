@@ -5,7 +5,7 @@
   <div class="app-container">
     <el-form ref="form" :model="classInfo" label-width="80px">
       <el-form-item label="课程编号">
-        <el-input v-model="classInfo.classId" :disabled="!isAdmin"/>
+        <el-input v-model="classInfo.classId" :disabled="true"/>
       </el-form-item>
       <el-form-item label="课程名">
         <el-input v-model="classInfo.name" :disabled="!isAdmin"/>
@@ -38,7 +38,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="上课日期">
-        <el-select placeholder="星期几" v-model="classInfo.scheduleDate" :disabled="!isAdmin">
+        <el-select v-model="classInfo.scheduleDate" :disabled="!isAdmin" placeholder="星期几">
           <el-option
             v-for="item in dateOption"
             :key="item.value"
@@ -49,7 +49,6 @@
       </el-form-item>
       <el-form-item label="上课开始时间" label-width="100px">
         <el-time-select
-          placeholder="开始时间"
           v-model="classInfo.scheduleStart"
           :picker-options="{
             start: '08:30',
@@ -57,13 +56,12 @@
             end: '22:30',
           }"
           :disabled="!isAdmin"
+          placeholder="开始时间"
           style="width:180px"
-        >
-        </el-time-select>
+        />
       </el-form-item>
       <el-form-item label="上课结束时间" label-width="100px">
         <el-time-select
-          placeholder="结束时间"
           v-model="classInfo.scheduleEnd"
           :picker-options="{
             start: '08:30',
@@ -72,12 +70,12 @@
             minTime: classInfo.scheduleStart,
           }"
           :disabled="!isAdmin"
+          placeholder="结束时间"
           style="width:180px"
-        >
-        </el-time-select>
+        />
       </el-form-item>
       <el-form-item label="课时">
-        <el-input v-model="classInfo.classHour" type="input" :disabled="!isAdmin" style="width: 200px" />
+        <el-input v-model="classInfo.classHour" :disabled="!isAdmin" type="input" style="width: 200px" />
       </el-form-item>
       <el-form-item label="课程简介">
         <el-input v-model="classInfo.description" :disabled="!isAdmin" type="textarea" />
